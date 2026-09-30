@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="com.helpdesk.model.User, com.helpdesk.model.Ticket, com.helpdesk.model.TicketComment, java.util.List, java.text.SimpleDateFormat" %>
 <%
     User currentUser = (User) session.getAttribute("user");
     if (currentUser == null) {

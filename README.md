@@ -6,23 +6,55 @@ Both the **Interactive Terminal Application** and the **Modern Browser-Based Web
 
 ---
 
-## 🚀 Key Features
+## 📂 Enterprise Package Architecture
 
-### 👤 1. Employee Workspace
-- **Raise Tickets**: Submit support requests with categorized technical details (Hardware, Software, Network, Access, Other) and urgency priority levels (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`).
-- **Real-Time Tracking**: View status updates (`OPEN`, `ASSIGNED`, `IN_PROGRESS`, `RESOLVED`, `CLOSED`) and see assigned technicians.
-- **Discussion Thread**: Post and view comments and troubleshooting updates chronologically.
-
-### 🛠️ 2. Technician Workbench
-- **Assigned Queue**: View incidents assigned specifically to the logged-in technician.
-- **Status Management**: Transition ticket states (`ASSIGNED` ➔ `IN_PROGRESS` ➔ `RESOLVED` ➔ `CLOSED`).
-- **Diagnosis Logging**: Post diagnosis findings and troubleshooting notes directly onto the incident thread.
-
-### 🛡️ 3. Administrator Control Center
-- **Triage & Assignment**: View all organization-wide tickets and dispatch them to available technicians.
-- **Lifecycle Management**: Change statuses and safely delete `OPEN` unassigned tickets.
-- **User Account Management**: Create and manage Employee, Technician, and Admin accounts with salted **PBKDF2** password hashing.
-- **Backlog & Priority Filtering**: Slice system tickets by status and priority with real-time KPI metrics.
+```
+JAVA_PROJECT/
+├── src/                                  # Java Source Packages
+│   └── com/
+│       └── helpdesk/
+│           ├── Main.java                 # Interactive Terminal application entry point
+│           ├── model/                    # Domain POJO entities
+│           │   ├── User.java             # User entity (Employee, Technician, Admin)
+│           │   ├── Ticket.java           # Incident Ticket model
+│           │   └── TicketComment.java    # Threaded discussion comment model
+│           ├── dao/                      # Database Access Objects (CRUD & Auth)
+│           │   ├── UserDAO.java          # Authentication & user management
+│           │   ├── TicketDAO.java        # Ticket lifecycle & role-based filtering
+│           │   └── TicketCommentDAO.java # Incident discussion thread operations
+│           ├── util/                     # Utilities & Database Connection
+│           │   ├── DBConnection.java     # JDBC connection manager (Local + Cloud env vars)
+│           │   └── PasswordUtil.java     # Salted PBKDF2WithHmacSHA256 password security
+│           └── servlet/                  # HTTP Web Controllers
+│               ├── LoginServlet.java     # Role verification & session management
+│               ├── LogoutServlet.java    # Session termination
+│               ├── EmployeeServlet.java  # Employee portal & ticket creation
+│               ├── TechnicianServlet.java# Technician workbench & diagnosis logger
+│               ├── AdminServlet.java     # Admin control center & ticket dispatching
+│               └── TicketServlet.java    # Incident details & comments thread
+├── webapp/                               # Web Application Frontend
+│   ├── css/
+│   │   └── style.css                     # Modern Navy/Indigo design system
+│   ├── WEB-INF/
+│   │   ├── classes/                      # Compiled bytecode
+│   │   ├── lib/                          # Runtime JAR dependencies
+│   │   └── web.xml                       # Deployment descriptor & servlet routes
+│   ├── index.jsp                         # "Who are you?" 3-card role selection
+│   ├── login.jsp                         # Sign-in form + Demo Credentials modal
+│   ├── employee-dashboard.jsp            # Employee workspace & ticket creation modal
+│   ├── technician-dashboard.jsp          # Technician queue & status update modal
+│   ├── admin-dashboard.jsp               # Admin dispatching, filters & user management
+│   └── ticket-details.jsp                # Incident details & discussion thread
+├── lib/                                  # External Dependencies
+│   ├── mysql-connector-j-8.3.0.jar
+│   ├── javax.servlet-api-4.0.1.jar
+│   └── jstl-1.2.jar
+├── schema.sql                            # MySQL DDL & seeded Indian accounts
+├── Dockerfile                            # Production cloud container configuration
+├── package_app.bat                       # 1-Click WAR build & package script
+├── run_terminal.bat                      # 1-Click Terminal application runner
+└── helpdesk.war                          # Production web application archive
+```
 
 ---
 
@@ -37,69 +69,18 @@ Both the **Interactive Terminal Application** and the **Modern Browser-Based Web
 | **TECHNICIAN** | Rahul Verma | `rahul` | `rahul123` | **#5** |
 | **TECHNICIAN** | Sneha Mukherjee | `sneha` | `sneha123` | **#6** |
 
-> 💡 *On the Web Application login screen, you can also click the top-right **"Demo Credentials"** button to auto-fill any of these accounts with a single click!*
-
 ---
 
-## 📂 Project Architecture
+## 💻 How to Run Locally
 
-```
-JAVA_PROJECT/
-├── lib/
-│   ├── mysql-connector-j-8.3.0.jar
-│   ├── javax.servlet-api-4.0.1.jar
-│   └── jstl-1.2.jar
-├── webapp/
-│   ├── css/
-│   │   └── style.css                 # Modern Navy/Indigo design system & responsive layout
-│   ├── WEB-INF/
-│   │   ├── classes/                  # Compiled bytecode for servlet container
-│   │   ├── lib/                      # Runtime dependencies
-│   │   └── web.xml                   # Deployment descriptor & servlet routes
-│   ├── index.jsp                     # "Who are you?" 3-card role selection landing page
-│   ├── login.jsp                     # Role login form + Demo Credentials modal
-│   ├── employee-dashboard.jsp        # Employee KPI cards, ticket table, and raise ticket modal
-│   ├── technician-dashboard.jsp      # Technician assigned queue and status update modal
-│   ├── admin-dashboard.jsp           # Admin dispatching, filters, and user management
-│   └── ticket-details.jsp            # Incident metadata and chronological discussion thread
-├── DBConnection.java                 # JDBC connection manager
-├── PasswordUtil.java                 # Salted PBKDF2WithHmacSHA256 password security
-├── User.java / UserDAO.java          # User entity and database access operations
-├── Ticket.java / TicketDAO.java      # Ticket entity and CRUD queries with auth checks
-├── TicketComment.java / TicketCommentDAO.java # Discussion comments DAO
-├── Main.java                         # Interactive terminal application
-├── LoginServlet.java                 # Role verification and session management
-├── LogoutServlet.java                # Session invalidation
-├── EmployeeServlet.java              # Employee portal controller
-├── TechnicianServlet.java            # Technician portal controller
-├── AdminServlet.java                 # Admin portal controller
-├── TicketServlet.java                # Ticket details & comments controller
-├── schema.sql                        # MySQL DDL and seeded Indian user data
-├── run_terminal.bat                  # One-click terminal app runner
-├── package_app.bat                   # One-click WAR build and packaging script
-└── helpdesk.war                      # Production-ready web archive
-```
-
----
-
-## 💻 How to Run
-
-### Option 1: Running the Terminal Application
-Double-click [run_terminal.bat](file:///c:/Users/aritr/OneDrive/Desktop/JAVA_PROJECT/run_terminal.bat) or run in PowerShell/CMD:
+### 1. Terminal Application
+Double-click [`run_terminal.bat`](file:///c:/Users/aritr/OneDrive/Desktop/JAVA_PROJECT/run_terminal.bat) or run:
 ```bash
-javac -cp ".;lib/*" *.java
-java -cp ".;lib/*" Main
+javac -cp ".;lib/*" -d webapp/WEB-INF/classes src/com/helpdesk/util/*.java src/com/helpdesk/model/*.java src/com/helpdesk/dao/*.java src/com/helpdesk/servlet/*.java src/com/helpdesk/*.java
+java -cp ".;webapp/WEB-INF/classes;lib/*" com.helpdesk.Main
 ```
 
-### Option 2: Running the Web Application
-1. Run [package_app.bat](file:///c:/Users/aritr/OneDrive/Desktop/JAVA_PROJECT/package_app.bat) to produce `helpdesk.war`:
-   ```bash
-   cmd /c package_app.bat
-   ```
-2. Copy `helpdesk.war` into the `webapps/` folder of your **Apache Tomcat** installation (e.g. `apache-tomcat-9.x/webapps/` or Tomcat 10 with Jakarta migration).
-3. Start Tomcat (`bin/startup.bat`).
-4. Open your browser and navigate to:
-   ```
-   http://localhost:8080/helpdesk/
-   ```
-5. Choose your role, use the **"Demo Credentials"** modal to sign in with 1 click, and explore!
+### 2. Web Application (Apache Tomcat)
+1. Double-click [`package_app.bat`](file:///c:/Users/aritr/OneDrive/Desktop/JAVA_PROJECT/package_app.bat) to generate `helpdesk.war`.
+2. Copy `helpdesk.war` into your Apache Tomcat `webapps/` folder.
+3. Start Tomcat and visit `http://localhost:8080/helpdesk/`.

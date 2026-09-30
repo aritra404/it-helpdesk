@@ -11,10 +11,10 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
-    <!-- Login & Logout Servlets -->
+    <!-- Authentication Servlets -->
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>LoginServlet</servlet-class>
+        <servlet-class>com.helpdesk.servlet.LoginServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -23,17 +23,17 @@
 
     <servlet>
         <servlet-name>LogoutServlet</servlet-name>
-        <servlet-class>LogoutServlet</servlet-class>
+        <servlet-class>com.helpdesk.servlet.LogoutServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 
-    <!-- Role Portals -->
+    <!-- Role-Based Dashboard Servlets -->
     <servlet>
         <servlet-name>EmployeeServlet</servlet-name>
-        <servlet-class>EmployeeServlet</servlet-class>
+        <servlet-class>com.helpdesk.servlet.EmployeeServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>EmployeeServlet</servlet-name>
@@ -42,7 +42,7 @@
 
     <servlet>
         <servlet-name>TechnicianServlet</servlet-name>
-        <servlet-class>TechnicianServlet</servlet-class>
+        <servlet-class>com.helpdesk.servlet.TechnicianServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>TechnicianServlet</servlet-name>
@@ -51,16 +51,17 @@
 
     <servlet>
         <servlet-name>AdminServlet</servlet-name>
-        <servlet-class>AdminServlet</servlet-class>
+        <servlet-class>com.helpdesk.servlet.AdminServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AdminServlet</servlet-name>
         <url-pattern>/admin</url-pattern>
     </servlet-mapping>
 
+    <!-- Incident Details & Comments Servlet -->
     <servlet>
         <servlet-name>TicketServlet</servlet-name>
-        <servlet-class>TicketServlet</servlet-class>
+        <servlet-class>com.helpdesk.servlet.TicketServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>TicketServlet</servlet-name>
