@@ -10,6 +10,19 @@ import java.sql.SQLException;
  */
 public class DBConnection {
 
+    // Explicitly load the MySQL JDBC driver for servlet containers (Tomcat)
+    static {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+            } catch (ClassNotFoundException ex) {
+                System.err.println("[DBConnection] MySQL JDBC Driver not found in classpath: " + ex.getMessage());
+            }
+        }
+    }
+
     // Default local configuration
     private static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/helpdesk_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
     private static final String DEFAULT_USER = "root";

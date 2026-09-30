@@ -21,6 +21,9 @@ FROM tomcat:9.0-jdk17-temurin-jammy
 # Remove default Tomcat webapps
 RUN rm -rf /usr/local/tomcat/webapps/*
 
+# Copy MySQL Driver to Tomcat shared lib directory
+COPY --from=builder /build/lib/mysql-connector-j-8.3.0.jar /usr/local/tomcat/lib/
+
 # Deploy ROOT.war so app is accessible directly at root URL (https://your-domain.onrender.com/)
 COPY --from=builder /build/ROOT.war /usr/local/tomcat/webapps/ROOT.war
 
